@@ -20,6 +20,7 @@ export const useMount = (callback: () => void) => {
   }, []);
 };
 
+// ?要么不传，要传就是数字
 export const useDebounce = (value: unknown, delay?: number) => {
   const [debounceValue, setDebounceValue] = useState(value);
 
