@@ -21,7 +21,7 @@ export const useMount = (callback: () => void) => {
 };
 
 // ?要么不传，要传就是数字
-export const useDebounce = (value: unknown, delay?: number) => {
+export const useDebounce = <V>(value: V, delay?: number) => {
   const [debounceValue, setDebounceValue] = useState(value);
 
   useEffect(() => {
@@ -30,4 +30,20 @@ export const useDebounce = (value: unknown, delay?: number) => {
   }, [value, delay]);
 
   return debounceValue;
+};
+
+export const useArray = <T>(initialArray: T[]) => {
+  const [value, setValue] = useState(initialArray);
+
+  return {
+    value,
+    setValue,
+    add: (item: T) => setValue([...value, item]),
+    clear: () => setValue([]),
+    remove: (index: number) => {
+      const copy = [...value];
+      copy.splice(index, 1);
+      setValue(copy);
+    },
+  };
 };
