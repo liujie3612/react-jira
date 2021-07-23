@@ -1,29 +1,47 @@
-import { useAuth } from "context/auth-context";
-import { FormEvent } from "react";
 
-export const Login = () => {
-  const { login, user } = useAuth();
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const username = (event.currentTarget.elements[0] as HTMLInputElement)
-      .value;
-    const password = (event.currentTarget.elements[1] as HTMLInputElement)
-      .value;
-    login({ username, password });
+import { Form, Input } from "antd";
+import { useAuth } from "context/auth-context";
+import { LongButton } from "unauthenticated-app";
+import { useAsync } from "utils/use-async";
+
+export const Login =({
+  onError,
+}: {
+  onError: (error: Error) => void;
+}) => {
+  const { login } = useAuth();
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true });
+
+  const handleSubmit = async (values: {
+    username: string;
+    password: string;
+  }) => {
+    try {
+      await run(login(values));
+    } catch (e) {
+      onError(e);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {user ? <div>登录成功,用户名:{user?.name}</div> : null}
-      <div>
-        <label htmlFor="username">用户名</label>
-        <input type="text" id={"username"} />
-      </div>
-      <div>
-        <label htmlFor="password">密码</label>
-        <input type="password" id={"password"} />
-      </div>
-      <button type="submit">登陆</button>
-    </form>
+    <Form onFinish={handleSubmit}>
+      <Form.Item
+        name={"username"}
+        rules={[{ required: true, message: "请输入用户名" }]}
+      >
+        <Input placeholder={"用户名"} type="text" />
+      </Form.Item>
+      <Form.Item
+        name={"password"}
+        rules={[{ required: true, message: "请输入密码" }]}
+      >
+        <Input placeholder={"密码"} type="password" />
+      </Form.Item>
+      <Form.Item>
+        <LongButton loading={isLoading} htmlType={"submit"} type={"primary"}>
+          登陆
+        </LongButton>
+      </Form.Item>
+    </Form>
   );
 };
