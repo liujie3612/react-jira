@@ -1,5 +1,5 @@
 import { Select } from "antd";
-import { Raw } from "unauthenticated-app";
+import { Raw } from "types";
 
 // 用React方法取出Select组件上的类型
 type SelectProps = React.ComponentProps<typeof Select>;
@@ -27,7 +27,7 @@ export const IdSelect = (props: IdSelectProps) => {
   const { value, onChange, defaultOptionName, options, ...restProps } = props;
   return (
     <Select
-      value={toNumber(value)}
+      value={options?.length ? toNumber(value) : 0}
       onChange={(value) => onChange(toNumber(value) || undefined)}
       {...restProps}
     >

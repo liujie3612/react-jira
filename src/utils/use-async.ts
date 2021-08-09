@@ -71,6 +71,10 @@ export const useAsync = <D>(
     run,
     setData,
     setError,
+    // 重新run
+    retry: () => {
+
+    },
     ...state,
   };
 };

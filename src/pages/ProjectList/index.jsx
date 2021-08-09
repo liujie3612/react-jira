@@ -5,17 +5,19 @@ import styled from "@emotion/styled";
 import { Typography } from "antd";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
-import { useUrlQueryParam } from "utils/url";
+// import { useUrlQueryParam } from "utils/url";
+import { useProjectsSearchParams } from "./util";
 
+// 基本类型，可以放到依赖里；组件状态，可以放到依赖里；非组件状态的对象，绝不可以放到依赖里
+// https://codesandbox.io/s/keen-wave-tlz9s?file=/src/App.js
 export const ProjectList = () => {
-  // 基本类型，可以放到依赖里；组件状态，可以放到依赖里；非组件状态的对象，绝不可以放到依赖里
-  // https://codesandbox.io/s/keen-wave-tlz9s?file=/src/App.js
-  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
+  useDocumentTitle("项目列表", false);
+
+  const [param, setParam] = useProjectsSearchParams();
   const debouncedParam = useDebounce(param, 200);
   const { isLoading, error, data: list } = useProjects(debouncedParam);
   // users是固定的
   const { data: users } = useUsers();
-  useDocumentTitle("项目列表", false);
 
   return (
     <Container>
