@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import qs from "qs";
 import * as auth from "auth-provider";
 import { useAuth } from "context/auth-context";
@@ -53,8 +54,11 @@ export const useHttp = () => {
   // ts中的typeof是在静态的时候运行的
   // js中的typeof是在runtime时运行的
   // 拿到函数的参数
-  return (...[endpoint, config]: Parameters<typeof http>) =>
-    http(endpoint, { ...config, token: user?.token });
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof http>) =>
+      http(endpoint, { ...config, token: user?.token }),
+    [user?.token]
+  );
 };
 
 // TS操作符 工具类型

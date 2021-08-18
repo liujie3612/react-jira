@@ -1,5 +1,5 @@
-import React from "react";
 import { Rate } from "antd";
+import React from "react";
 
 interface PinProps extends React.ComponentProps<typeof Rate> {
   checked: boolean;
